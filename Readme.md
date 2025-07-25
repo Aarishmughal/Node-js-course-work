@@ -257,4 +257,21 @@ Different techniques to perform different tasks in Node.JS.
     ```
 
 ### Getting URL Parameters
-1. 
+
+1. Import the `url` module by the command:
+    ```javascript
+    const url = require("url");
+    ```
+2. Get the request pathname and queries via:
+    ```javascript
+    const { query, pathname } = url.parse(req.url, true);
+    ```
+    This will create two variables in one line.<br>
+    `query` &rarr; `url.parse(req.url, true).query`<br>
+    `pathname` &rarr; `url.parse(req.url, true).pathname`
+3. Access parameters with `query` variable.
+    ```javascript
+    const product = productDataObj[query.id];
+    const output = replaceTemplate(templateProduct, product);
+    res.end(output);
+    ```
