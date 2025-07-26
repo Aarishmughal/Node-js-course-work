@@ -164,6 +164,29 @@ Important Methods for this Module:
         const { query, pathname } = url.parse(req.url, true);
         ```
 
+### `slugify` Module for Generating SLUGS
+
+```bash
+npm install slugify
+```
+
+```javascript
+const slugify = require("slugify");
+```
+
+Important Methods for this Module:
+
+1. `slugify()` is used to generate slugs.
+    - Arguments:
+        1. `string` to be converted to slug.
+        2. `options: Object` for different slug options.
+    - Example Use:
+        ```javascript
+        const slugs = productDataObj.map((product) =>
+            slugify(product.productName, { lower: true })
+        );
+        ```
+
 ## Techniques in Node.JS
 
 Different techniques to perform different tasks in Node.JS.
@@ -199,7 +222,7 @@ Different techniques to perform different tasks in Node.JS.
 
 1.  Create a Standard BLANK `html` template/file/Code to render content in.
 2.  Make sure to use PLACEHOLDERS instead of actual content. For example
-    ```html
+    ```xml
     <div class="product__hero">
         <span class="product__emoji product__emoji--1">{%PRODUCT_IMAGE%}</span>
         <h2 class="product__name">{%PRODUCT_NAME%}</h2>
