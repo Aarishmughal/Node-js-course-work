@@ -13,6 +13,10 @@ My own notes/progres reports regarding the Node.JS Bootcamp course.
     -   [Restarting Server Automatically](#restarting-server-automatically)
     -   [Rendering Content Dynamically](#rendering-content-dynamically)
     -   [Getting URL Parameters](#getting-url-parameters)
+    -   [Understanding Node Single-Event Loop](#understanding-node-single-event-loop)
+    -   [Event-Driven Architechture](#event-driven-architechture)
+    -   [Using Streams in Node.JS](#using-streams-in-nodejs)
+    -   [How Requiring Modules Really works in Node.JS?](#how-requiring-modules-really-works-in-nodejs)
 -   [Coming Soon](#)
 
 ## NOTES
@@ -298,3 +302,80 @@ Different techniques to perform different tasks in Node.JS.
     const output = replaceTemplate(templateProduct, product);
     res.end(output);
     ```
+
+### Understanding Node Single-Event Loop
+
+The Node.js event loop is a mechanism that allows Node.js to handle multiple operations concurrently, even though it runs on a single thread. It processes asynchronous callbacks and ensures non-blocking I/O, making Node.js highly efficient for scalable network applications. Understanding how the event loop works is crucial for writing performant and bug-free Node.js code.
+
+Events occur in the single-threaded event loop in the following order of precedence:
+
+1. Initialize program.
+2. Execute top-level code.
+3. Require modules.
+4. Register event callbacks.
+5. Enter (start) the event loop, which begins processing events and callbacks.
+
+Cycle of event loop execution works as follows:
+
+1. Expired Timer Callbacks.
+2. I/O Callbacks.
+3. setImmediate Callbacks.
+4. Close Callbacks.
+5. Any pending timers or I/O operations?
+    - If yes, go back to step 1.
+6. If no, exit the event loop.
+
+`NEW CONCEPT:`
+
+-   NEWTICKS.
+-   MICROTASKS Queue.
+-   Thread Pool.
+
+### Event-Driven Architechture
+
+1. `.on()` is a listener, similar to `.onClick()`, `onHover()`, etc.
+2. `.emit()` is an event occuring, similar to a user actually cliking the button, performing the event.
+3. Server can also be started via the snippet as:
+    ```javascript
+    const server = http.createServer();
+    server.on("request", (req, res) => {
+        console.log("Request Recieved.");
+        res.end("Request Recieved.");
+    });
+    server.listen(8000, "127.0.0.1", () => {
+        console.log("Server is Listening...");
+    });
+    ```
+
+### Using Streams in Node.JS
+
+1. Streams are objects that allow reading data from a source or writing data to a destination in a continuous manner.
+2. Streams can be readable, writable, or both.
+3. Types of Streams:
+    - **Readable Streams**: Used for reading data.
+    - **Writable Streams**: Used for writing data.
+    - **Duplex Streams**: Can read and write data.
+    - **Transform Streams**: Can modify or transform the data as it is read or written.
+4. Piping Streams:
+
+    - Piping is a way to connect the output of one stream to the input of another.
+    - Example Use:
+
+    ```javascript
+    const readable = fs.createReadStream("./test-file.txt");
+    readable.pipe(res);
+    ```
+
+### How Requiring Modules Really works in Node.JS?
+
+When you require a module in Node.js, it goes through the following steps:
+
+1. Resolving and Loading.
+2. Wrapping in a Function.
+3. Execution.
+4. Returning Exports.
+5. Caching the Module.
+
+_Wrapper function can be checked by using the command `console.log(arguments)`._
+
+-   We can export and import modules in Node.JS via different methods. Refer to the file `modules.js` for further on this.

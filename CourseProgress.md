@@ -20,3 +20,24 @@ _Different Topics completed from the course per section._
 _Different Topics completed from the course per section._
 
 # Section 03
+
+1. DNS & HTTP Request Response Cycle.
+2. Examining HTTP Request Response Cycle in Browser.
+3. Frontend Vs Backend.
+4. Static vs Dynamic vs API Sites.
+
+# Section 04
+
+1. Anatomy of Node.JS
+2. Contribution of V8 Engine and Libuv
+3. Languages in Node.JS
+4. Event Loop
+5. Thread pool
+6. Event Driven Architecture
+7. Streams
+8. Types of Streams
+9. Piping Streams
+10. How requiring Modules really works?
+11. Exporting Modules Methods
+
+# Section 06
