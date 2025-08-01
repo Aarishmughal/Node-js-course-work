@@ -379,3 +379,149 @@ When you require a module in Node.js, it goes through the following steps:
 _Wrapper function can be checked by using the command `console.log(arguments)`._
 
 -   We can export and import modules in Node.JS via different methods. Refer to the file `modules.js` for further on this.
+
+### Using Promises to Avoid Callback Hell
+
+1. Promises are objects in JS ES6 Syntax. They represent a value that will be returned later some time.
+    - Example Use for Creating Promise:
+    ```javascript
+    const readFilePromise = (file) => {
+        return new Promise((resolve, reject) => {
+            fs.readFile(file, (err, data) => {
+                if (err) reject(err);
+                resolve(data);
+            });
+        });
+    };
+    ```
+    - Example Use for Consuming Promise:
+    ```
+    GIVEN IN CODE SECTION BELOW
+    ```
+2. This _Value_ can be of two types: `resolve`, `reject`.
+    - `resolve` represent the Promise successful message/value. It is accessed by the method `then()` onto the promise.
+    - `reject` represent the Promise unsuccessful value which is accessed by the method `catch()` onto the promise object.
+3. Both methods `then()` and `catch()` take a callback function as their argument.
+4. Promises don't stop the HELL TRIANGLE from appearing unless they are used via their `chaining` mechanism.
+    - Promises can be chained to one and other if the callback function for `then()` method of first promise `returns` another promise.
+    - That way the `then()` method for the first promise can be used to chain other `then()` methods for more and more promise objects.
+    - All return the one last `catch()` method.
+    - Example Use:
+    ```javascript
+    // Promise 01: Reading File
+    readFilePromise(`${__dirname}/dog.txt`)
+        // Then 01
+        .then((data) => {
+            console.log(`${data}`);
+            // Promise 02: Fetching Image
+            return superagent.get(
+                `https://dog.ceo/api/breed/${data}/images/random`
+            );
+        })
+        // Then 02
+        .then((res) => {
+            // Promise 03: Storing Image URL
+            return writeFilePromise("dog-image.txt", res.body.message);
+        })
+        // Then 03
+        .then((result) => {
+            console.log(`Random ${result} Image Saved!`);
+        })
+        .catch((err) => {
+            console.log(err);
+        });
+    ```
+
+### Understanding Aync/Await to further Improve Codebase
+
+1.  Async functions can include one or more promises with `await` keyword.
+
+    -   Example Creation:
+
+    ```javascript
+    const getDogPic = async () => {
+        try {
+        } catch (err) {}
+    };
+    ```
+
+2.  Error handling inside the `async` function is done via the `try` and `catch` blocks.
+3.  `await` works the same way as async codes/promises.
+
+    -   Example Use:
+
+    ```javascript
+    const data = await readFilePromise(`${__dirname}/dog.txt`);
+    console.log(data);
+
+    const res = await superagent.get(
+        `https://dog.ceo/api/breed/${data}/images/random`
+    );
+    ```
+
+4.  `IMPORTANT`: An Async function will always return a successful Promise. It may be accessed using a `return` statement at the end of the `async` function. In order to handle the error from promises inside the `async` function, you may `throw` the error from the `catch` block, like shown in example below:
+
+        - Example Use:
+
+        ```javascript
+        const getDogPic = async () => {
+            try {
+                //...
+            } catch (err) {
+                console.log(err);
+                throw err;
+            }
+            return "2. Ready!"; // Like this
+        };
+        //...
+        getDogPic()
+            .then((result) => {
+                console.log(result);
+                console.log("2. Done Getting Dog Pics!");
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+        ```
+
+    _But as obvious in the above given code snippets, this pattern of using async functions and the await keyword introduces promises in some parts. To avoid this follow through the next section._
+
+### Making Codebase consistent with Async/Await and IIFE pattern
+
+1. IIEF stands for `Immediately Invoked Function Expressions`.
+
+    - Example Use:
+
+    ```javascript
+    (() => {
+        //Some Code for function
+    })(); //Instant Call for the function;
+    ```
+
+2. Make a new Async function using the IIFE pattern.
+3. Use the `try` and `catch` block in this function.
+4. Store return of original async function in a new variable, USING THE `AWAIT` KEYWORD.
+    - Example Use:
+    ```javascript
+    (async () => {
+        try {
+            console.log("1. Getting Dog Pics");
+            const x = await getDogPic();
+            console.log(x);
+            console.log("3. Done Getting Dog Pics!");
+        } catch (err) {
+            console.log(err);
+        }
+    })();
+    ```
+
+## Express.JS
+
+Express is a minimal Node.JS framework which means it is built on top of Node.JS. It allows us to develop applications much faster as it comes out-of-box with great features like:
+
+-   handling complex routing
+-   easier handling of requests
+-   adding middleware
+-   server-side rendering, etc.
+
+It also allows organizing the application into MVC architecture.
