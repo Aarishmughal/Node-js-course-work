@@ -17,6 +17,10 @@ My own notes/progres reports regarding the Node.JS Bootcamp course.
     -   [Event-Driven Architechture](#event-driven-architechture)
     -   [Using Streams in Node.JS](#using-streams-in-nodejs)
     -   [How Requiring Modules Really works in Node.JS?](#how-requiring-modules-really-works-in-nodejs)
+    -   [Using Promises to Avoid Callback Hell](#using-promises-to-avoid-callback-hell)
+    -   [Understanding Aync/Await to further Improve Codebase](#understanding-ayncawait-to-further-improve-codebase)
+    -   [Making Codebase consistent with Async/Await and IIFE pattern](#making-codebase-consistent-with-asyncawait-and-iife-pattern)
+    -   [Fullfilling Multiple Promises using `Promise.all()`](#fullfilling-multiple-promises-using-promiseall)
 -   [Coming Soon](#)
 
 ## NOTES
@@ -513,6 +517,52 @@ _Wrapper function can be checked by using the command `console.log(arguments)`._
             console.log(err);
         }
     })();
+    ```
+
+### Fullfilling Multiple Promises using `Promise.all()`
+
+In a certain situation, where we want to handle multiple promises at the same time. We don't want the promises to wait for one and other. We can perform one call for all promises using the `Promise.all()` method.
+
+1. Save each promsie call into variable as shown below:
+
+    ```javascript
+    const res1Pro = await superagent.get(
+        `https://dog.ceo/api/breed/${data}/images/random`
+    );
+    const res2Pro = await superagent.get(
+        `https://dog.ceo/api/breed/${data}/images/random`
+    );
+    const res3Pro = await superagent.get(
+        `https://dog.ceo/api/breed/${data}/images/random`
+    );
+    ```
+
+2. Create another variable `all` that is resolving all promises at the same time.
+
+    - This method takes an array of promises to resolve at once.
+    - Example Use:
+
+    ```javascript
+    const all = await Promise.all([res1Pro, res2Pro, res3Pro]);
+    ```
+
+3. Now the variable `all` contains an array of all the resolved promises in the same order as they were passed in the array.
+
+    - Example Use:
+
+    ```javascript
+    console.log(all[0].body.message); // First Promise Result
+    console.log(all[1].body.message); // Second Promise Result
+    console.log(all[2].body.message); // Third Promise Result
+    ```
+
+4. To get all the messages we would use the `maps()` method as shown below:
+
+    ```javascript
+    const images = all.map((res) => res.body.message);
+    console.log(images);
+
+    await writeFilePromise("dog-image.txt", images.join("\n"));
     ```
 
 ## Express.JS
